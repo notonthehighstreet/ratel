@@ -256,7 +256,7 @@ public class HoneybadgerTest {
         }
 
         @Override
-        public Collection<String> getExclude() {
+        public Collection<String> getExcludeExceptions() {
             return exclude;
         }
 

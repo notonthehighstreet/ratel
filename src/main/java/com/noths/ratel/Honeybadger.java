@@ -165,7 +165,7 @@ public class Honeybadger {
     }
 
     private boolean ignoreException(final Throwable t) {
-        return configuration.getExclude().contains(t.getClass().getName());
+        return configuration.getExcludeExceptions().contains(t.getClass().getName());
     }
 
     private Map<String, Object> constructNotice(final Throwable e, final Request request) {

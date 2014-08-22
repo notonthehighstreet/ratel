@@ -70,5 +70,5 @@ public interface HoneybadgerConfiguration {
      * Any exception classes that should NOT be sent to Honeybadger. This must be the exact class name and not super classes.
      * @return Exception classes that shouldn't be sent to Honeybadger.
      */
-    Collection<String> getExclude();
+    Collection<String> getExcludeExceptions();
 }
