@@ -35,89 +35,35 @@ configuration from the relevant location.
 
 ###Example###
 This is an example of using this library with Spring Boot:
-1. Implement the configuration class
+
+Implement the configuration class:
 ````java
 @Component
-@ConfigurationProperties("honeybadger")
 public class ErrorNotificationConfiguration
     implements HoneybadgerConfiguration {
 
-    @NotNull
-    @Size(min = 1)
-    private String key;
-
-    @NotNull
-    private URL url;
-
-    @NotNull
-    @Size(min = 1)
-    private String name;
-
-    private String version;
-
-    @NotNull
-    @Size(min = 1)
-    private String environment;
-
-    private List<String> exclude;
+    @Override
+    public String getKey() {...}
 
     @Override
-    public String getKey() {
-        return key;
-    }
-
-    public void setKey(final String key) {
-        this.key = key;
-    }
+    public URL getUrl() {...}
 
     @Override
-    public URL getUrl() {
-        return url;
-    }
-
-    public void setUrl(final URL url) {
-        this.url = url;
-    }
-
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    public void setName(final String name) {
-        this.name = name;
-    }
+    public String getName() {...}
 
     @Override
     @CheckForNull
-    public String getVersion() {
-        return version;
-    }
-
-    public void setVersion(final String version) {
-        this.version = version;
-    }
+    public String getVersion() {...}
 
     @Override
-    public String getEnvironment() {
-        return environment;
-    }
-
-    public void setEnvironment(final String environment) {
-        this.environment = environment;
-    }
+    public String getEnvironment() {...}
 
     @Override
-    public Collection<String> getExclude() {
-        return exclude;
-    }
+    public Collection<String> getExcludeExceptions() {...}
 
-    public void setExclude(final List<String> exclude) {
-        this.exclude = exclude;
-    }
 }
 ````
-1. Add the `Honeybadger` class to the Spring context
+Add the `Honeybadger` class to the Spring context
 ````java
 @Configuration
 @ComponentScan
@@ -131,7 +77,7 @@ public class Application {
     ...
 }
 ````
-1. Wire up the `Honeybadger` class so that it gets called when an exception occurs
+Wire up the `Honeybadger` class so that it gets called when an exception occurs
 ````java
 @Component
 public class ErrorNotifyingHandlerInterceptor
@@ -174,7 +120,4 @@ public class ErrorNotifyingHandlerInterceptor
     }
 }
 ````
-1. Set the relevant properties in the application configuration file
-(application.properties or application.yml) for `honeybadger.key`,
-`honeybadger.url`, `honeybadger.name`, `honeybadger.version`,
-`honeybadger.environment` and `honeybadger.exclude`.
+Honeybadger will then receive notifications everytime an exception occurs. You may wish to look into the `@ConditionalOnProperty` annotation to only enable Honeybadger integration when an application property has been set.
