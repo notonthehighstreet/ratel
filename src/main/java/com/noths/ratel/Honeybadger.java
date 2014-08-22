@@ -1,5 +1,31 @@
 package com.noths.ratel;
 
+/*
+ * #%L
+ * Ratel Library
+ * %%
+ * Copyright (C) 2014 notonthehighstreet.com
+ * %%
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ * #L%
+ */
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.annotation.Nullable;
@@ -48,6 +74,15 @@ public class Honeybadger {
 
     /**
      * Notify Honeybadger that an exception occurred.
+     * @param identifier Identifier for this exception such as the URL for a web request or correlation ID for a message.
+     * @param t Exception that occurred.
+     */
+    public void notify(final String identifier, final Throwable t) {
+        notify(identifier, null, null, null, null, null, Collections.<String, String[]>emptyMap(), t);
+    }
+
+    /**
+     * Notify Honeybadger that an exception occurred.
      * @param url URL that was being called when the error occurred.
      * @param controller Controller that was called by the user (optional).
      * @param action Action that was called on the controller by the user (optional).
@@ -59,6 +94,25 @@ public class Honeybadger {
      */
     public void notify(final String url, @Nullable final String controller, @Nullable final String action, @Nullable final String method, @Nullable final String userAgent,
                        @Nullable final String remoteAddress, final Map<String, String[]> parameters, final Throwable t) {
+        notify(url, controller, action, method, userAgent, remoteAddress, parameters, Collections.<String, String>emptyMap(), Collections.<String, String>emptyMap(), t);
+    }
+
+    /**
+     * Notify Honeybadger that an exception occurred.
+     * @param url URL that was being called when the error occurred.
+     * @param controller Controller that was called by the user (optional).
+     * @param action Action that was called on the controller by the user (optional).
+     * @param method HTTP method that was being used when the exception occurred  (optional).
+     * @param userAgent User agent of the user that made the request  (optional).
+     * @param remoteAddress Address of the user that made the request  (optional).
+     * @param parameters Parameters that had been sent with the HTTP request.
+     * @param sessionDetails Session details associated with the HTTP request.
+     * @param cookies Cookies associated with the HTTP request.
+     * @param t Exception that occurred.
+     */
+    public void notify(final String url, @Nullable final String controller, @Nullable final String action, @Nullable final String method, @Nullable final String userAgent,
+                       @Nullable final String remoteAddress, final Map<String, String[]> parameters, final Map<String, String> sessionDetails, final Map<String, String> cookies,
+                       final Throwable t) {
 
         if (ignoreException(t)) {
             return;
@@ -80,7 +134,7 @@ public class Honeybadger {
             cgi.put("SERVER_SOFTWARE", configuration.getName() + "/" + version);
         }
 
-        notifyHoneybadger(constructNotice(t, constructRequest(url, controller, action, parameters, cgi)));
+        notifyHoneybadger(constructNotice(t, constructRequest(url, controller, action, parameters, sessionDetails, cookies, cgi)));
     }
 
     private void notifyHoneybadger(final Map<String, ?> notice) {
@@ -124,7 +178,7 @@ public class Honeybadger {
     }
 
     private Request constructRequest(final String url, @Nullable final String controller, @Nullable final String action, final Map<String, String[]> parameters,
-                                     final Map<String, String> cgi) {
+                                     final Map<String, String> sessionDetails, final Map<String, String> cookies, final Map<String, String> cgi) {
 
         final Request request = new Request();
         request.setUrl(url);
@@ -137,6 +191,8 @@ public class Honeybadger {
         }
 
         request.setParams(join(parameters));
+        request.setSession(sessionDetails);
+        request.setCookies(cookies);
 
         return request;
     }
