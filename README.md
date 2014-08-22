@@ -53,8 +53,6 @@ public class ErrorNotificationConfiguration
     @Size(min = 1)
     private String name;
 
-    @NotNull
-    @Size(min = 1)
     private String version;
 
     @NotNull

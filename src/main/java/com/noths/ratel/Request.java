@@ -36,7 +36,7 @@ class Request {
     @JsonProperty("cgi_data")
     private Map<String, String> cgiData;
     private Map<String, String> session;
-    private Map<String, String> cookies;
+    private Map<String, String> context;
     private String component;
     private String action;
 
@@ -72,12 +72,12 @@ class Request {
         this.session = session;
     }
 
-    public Map<String, String> getCookies() {
-        return cookies;
+    public Map<String, String> getContext() {
+        return context;
     }
 
-    public void setCookies(final Map<String, String> cookies) {
-        this.cookies = cookies;
+    public void setContext(final Map<String, String> context) {
+        this.context = context;
     }
 
     public String getComponent() {

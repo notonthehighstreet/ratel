@@ -94,7 +94,8 @@ public class Honeybadger {
      */
     public void notify(final String url, @Nullable final String controller, @Nullable final String action, @Nullable final String method, @Nullable final String userAgent,
                        @Nullable final String remoteAddress, final Map<String, String[]> parameters, final Throwable t) {
-        notify(url, controller, action, method, userAgent, remoteAddress, parameters, Collections.<String, String>emptyMap(), Collections.<String, String>emptyMap(), t);
+        notify(url, controller, action, method, userAgent, remoteAddress, parameters, Collections.<String, String>emptyMap(), Collections.<String, String>emptyMap(),
+                Collections.<String, String>emptyMap(), t);
     }
 
     /**
@@ -108,11 +109,12 @@ public class Honeybadger {
      * @param parameters Parameters that had been sent with the HTTP request.
      * @param sessionDetails Session details associated with the HTTP request.
      * @param cookies Cookies associated with the HTTP request.
+     * @param context Context of the exception.
      * @param t Exception that occurred.
      */
     public void notify(final String url, @Nullable final String controller, @Nullable final String action, @Nullable final String method, @Nullable final String userAgent,
                        @Nullable final String remoteAddress, final Map<String, String[]> parameters, final Map<String, String> sessionDetails, final Map<String, String> cookies,
-                       final Throwable t) {
+                       final Map<String, String> context, final Throwable t) {
 
         if (ignoreException(t)) {
             return;
@@ -133,8 +135,11 @@ public class Honeybadger {
         if (version != null) {
             cgi.put("SERVER_SOFTWARE", configuration.getName() + "/" + version);
         }
+        if (!cookies.isEmpty()) {
+            cgi.put("HTTP_COOKIE", toString(cookies));
+        }
 
-        notifyHoneybadger(constructNotice(t, constructRequest(url, controller, action, parameters, sessionDetails, cookies, cgi)));
+        notifyHoneybadger(constructNotice(t, constructRequest(url, controller, action, parameters, sessionDetails, context, cgi)));
     }
 
     private void notifyHoneybadger(final Map<String, ?> notice) {
@@ -178,7 +183,7 @@ public class Honeybadger {
     }
 
     private Request constructRequest(final String url, @Nullable final String controller, @Nullable final String action, final Map<String, String[]> parameters,
-                                     final Map<String, String> sessionDetails, final Map<String, String> cookies, final Map<String, String> cgi) {
+                                     final Map<String, String> sessionDetails, final Map<String, String> context, final Map<String, String> cgi) {
 
         final Request request = new Request();
         request.setUrl(url);
@@ -192,9 +197,24 @@ public class Honeybadger {
 
         request.setParams(join(parameters));
         request.setSession(sessionDetails);
-        request.setCookies(cookies);
+        request.setContext(context);
 
         return request;
+    }
+
+    private String toString(final Map<String, String> map) {
+        final StringBuilder sb = new StringBuilder(map.size() * 16);
+
+        final Iterator<Map.Entry<String, String>> iterator = map.entrySet().iterator();
+        while (iterator.hasNext()) {
+            final Map.Entry<String, String> e = iterator.next();
+            sb.append(e.getKey()).append("=").append(e.getValue());
+            if (iterator.hasNext()) {
+                sb.append("; ");
+            }
+        }
+
+        return sb.toString();
     }
 
     private <K, V> Map<K, String> join(final Map<K, V[]> map) {

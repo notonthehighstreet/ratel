@@ -65,7 +65,7 @@ class Error {
 
     private Error(final String clazz, final String message, final List<Backtrace> backtrace) {
         this.clazz = clazz;
-        this.message = message.length() > 1024 ? message.substring(0, 1024) : message;
+        this.message = message != null && message.length() > 1024 ? message.substring(0, 1024) : message;
         this.backtrace = backtrace;
     }
 
