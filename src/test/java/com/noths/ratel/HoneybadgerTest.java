@@ -40,7 +40,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.concurrent.Executor;
 
 import static org.mockito.Matchers.any;
@@ -60,6 +59,7 @@ public class HoneybadgerTest {
     private URL url;
     private String key;
     private HttpRequest httpRequest;
+    private String language;
 
     @Before
     public void setup() throws MalformedURLException {
@@ -71,6 +71,7 @@ public class HoneybadgerTest {
         name = "expected name";
         url = new URL("http", "localhost", 80, "index.html");
         key = "expected key";
+        language = "language";
 
         configuration.setEnvironment(systemEnvironment);
         configuration.setName(name);
@@ -79,7 +80,7 @@ public class HoneybadgerTest {
         configuration.setExclude(Collections.singletonList(UnsupportedOperationException.class.getName()));
 
         httpRequest = mock(HttpRequest.class);
-        subject = new Honeybadger(configuration, executor, httpRequest);
+        subject = new Honeybadger(configuration, executor, httpRequest, language);
     }
 
     @Test
@@ -162,11 +163,11 @@ public class HoneybadgerTest {
             return false;
         }
 
-        if (anyNull(server.getHostname(), server.getProjectRoot().getPath()) || !Objects.equals(server.getEnvironmentName(), systemEnvironment)) {
+        if (anyNull(server.getHostname(), server.getProjectRoot().getPath()) || !equals(server.getEnvironmentName(), systemEnvironment)) {
             return false;
         }
 
-        if (anyNull(notifier.getName(), notifier.getVersion()) || !Objects.equals(notifier.getName(), name)) {
+        if (anyNull(notifier.getName(), notifier.getVersion()) || !equals(notifier.getName(), name) || !equals(notifier.getLanguage(), language)) {
             return false;
         }
 
@@ -204,6 +205,16 @@ public class HoneybadgerTest {
             }
         }
         return false;
+    }
+
+    private boolean equals(final Object one, final Object two) {
+        if (one == two) {
+            return true;
+        }
+        if (one == null || two == null) {
+            return false;
+        }
+        return one.equals(two);
     }
 
     private static final class DummyConfiguration implements HoneybadgerConfiguration {

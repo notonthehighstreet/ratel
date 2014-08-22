@@ -36,11 +36,11 @@ class Notifier {
     private final String version;
     private final String language;
 
-    Notifier(final String apiKey, final String name, final String version) {
+    Notifier(final String apiKey, final String name, final String version, final String language) {
         this.apiKey = apiKey;
         this.name = name;
         this.version = version;
-        this.language = "java";
+        this.language = language;
     }
 
     public String getApiKey() {

@@ -62,14 +62,26 @@ public class Honeybadger {
      * @param mapper Jackson mapper that will be used to turn objects into JSON.
      */
     public Honeybadger(final HoneybadgerConfiguration configuration, final Executor executor, final ObjectMapper mapper) {
-        this(configuration, executor, new HttpRequest(mapper));
+        this(configuration, executor, new HttpRequest(mapper), "java");
     }
 
-    Honeybadger(final HoneybadgerConfiguration configuration, final Executor executor, final HttpRequest request) {
+    /**
+     * Construct a new instance with the given parameters.
+     * @param configuration The configuration that will be used when communicating to Honeybadger.
+     * @param executor Executor where the communication with Honeybadger will take place. This is used to avoid the scenario where responding back to the user is delayed while waiting
+     *                 for the request to Honeybadger to timeout.
+     * @param mapper Jackson mapper that will be used to turn objects into JSON.
+     * @param language Programming language that the application is written in (java, scala, groovy, etc).
+     */
+    public Honeybadger(final HoneybadgerConfiguration configuration, final Executor executor, final ObjectMapper mapper, final String language) {
+        this(configuration, executor, new HttpRequest(mapper), language);
+    }
+
+    Honeybadger(final HoneybadgerConfiguration configuration, final Executor executor, final HttpRequest request, final String language) {
         this.configuration = configuration;
         this.executor = executor;
         this.request = request;
-        this.notifier = new Notifier(configuration.getKey(), configuration.getName(), API_VERSION);
+        this.notifier = new Notifier(configuration.getKey(), configuration.getName(), API_VERSION, language);
     }
 
     /**
