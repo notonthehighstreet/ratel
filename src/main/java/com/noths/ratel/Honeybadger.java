@@ -55,7 +55,7 @@ public class Honeybadger {
     private final HttpRequest request;
 
     /**
-     * Construct a new instance with the given parameters.
+     * Construct a new instance with the given parameters. Will use Java as the programming language.
      * @param configuration The configuration that will be used when communicating to Honeybadger.
      * @param executor Executor where the communication with Honeybadger will take place. This is used to avoid the scenario where responding back to the user is delayed while waiting
      *                 for the request to Honeybadger to timeout.

@@ -85,8 +85,7 @@ public class HoneybadgerTest {
 
     @Test
     public void shouldDoNothingIfExceptionExcluded() {
-        subject.notify("", null, null, null, null, null, Collections.<String, String[]>emptyMap(),
-                new UnsupportedOperationException());
+        subject.notify("", new UnsupportedOperationException());
 
         verifyZeroInteractions(executor, httpRequest);
     }
