@@ -111,19 +111,29 @@ public class HoneybadgerTest {
             }
         }).when(executor).execute(any(Runnable.class));
 
-        subject.notify(requestUri, controller, action, method, userAgent, remoteAddress,
+        subject.notify(requestUri,
+                controller,
+                action,
+                method,
+                userAgent,
+                remoteAddress,
                 toArray(parameters),
                 new IllegalArgumentException(message));
 
-        final String description = String.format("HttpEntity with headers (contentType=application/json, X-API-Key=%s) and " +
-                        "body (controller=%s, action=%s, userAgent=%s, remoteAddress=%s, requestUri=%s, parameters=%s, message=%s, method=%s, environment=%s, name=%s)",
+        final String description = String.format("HttpEntity with headers (contentType=application/json, X-API-Key=%s)" +
+                        " and body (controller=%s, action=%s, userAgent=%s, remoteAddress=%s, requestUri=%s," +
+                        " parameters=%s, message=%s, method=%s, environment=%s, name=%s)",
                 key, controller, action, userAgent, remoteAddress, requestUri, parameters, message, method, systemEnvironment, name);
-        verify(httpRequest).call(argThat(new CustomTypeSafeMatcher<HttpURLConnection>("HttpURLConnection with a URL of " + url) {
+
+        CustomTypeSafeMatcher<HttpURLConnection> matchesHttpUrlConnection =
+                new CustomTypeSafeMatcher<HttpURLConnection>("HttpURLConnection with a URL of " + url) {
             @Override
             protected boolean matchesSafely(final HttpURLConnection item) {
                 return item.getURL() == url;
             }
-        }), eq("POST"), eq(expectedHeaders(key)), argThat(new CustomTypeSafeMatcher<Object>(description) {
+        };
+
+        CustomTypeSafeMatcher<Object> matchesBodyMap = new CustomTypeSafeMatcher<Object>(description) {
             @Override
             protected boolean matchesSafely(final Object item) {
                 if (!(item instanceof Map)) {
@@ -132,14 +142,16 @@ public class HoneybadgerTest {
                 final Map<?, ?> body = (Map<?, ?>) item;
                 return bodyMatches(body, requestUri, parameters, method, controller, action, userAgent, remoteAddress);
             }
-        }));
+        };
+
+        verify(httpRequest).call(argThat(matchesHttpUrlConnection), eq("POST"), eq(expectedHeaders(key)), argThat(matchesBodyMap));
     }
 
     private Map<String, String[]> toArray(final Map<String, String> map) {
         final Map<String, String[]> ret = new HashMap<String, String[]>();
 
         for (final Map.Entry<String, String> e : map.entrySet()) {
-            ret.put(e.getKey(), new String[] {e.getValue()});
+            ret.put(e.getKey(), new String[]{e.getValue()});
         }
 
         return ret;
