@@ -1,4 +1,4 @@
-package com.noths.ratel;
+package com.noths.ratel.internal.model;
 
 /*
  * #%L
@@ -26,16 +26,34 @@ package com.noths.ratel;
  * #L%
  */
 
-class Stats {
+import java.io.File;
+import java.net.URISyntaxException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-    private final Mem mem;
+public class ProjectRoot {
 
-    public Stats(final Mem mem) {
-        this.mem = mem;
+    private static final Logger LOG = Logger.getLogger(ProjectRoot.class.getName());
+
+    public static ProjectRoot projectRoot() {
+        String rootDirectory;
+        try {
+            rootDirectory = new File(ProjectRoot.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getAbsolutePath();
+        } catch (URISyntaxException e) {
+            LOG.log(Level.WARNING, "Unable to work out root directory", e);
+            rootDirectory = "Unable to work out root directory " + e.getMessage();
+        }
+
+        return new ProjectRoot(rootDirectory);
     }
 
-    public Mem getMem() {
-        return mem;
+    private final String path;
+
+    private ProjectRoot(final String path) {
+        this.path = path;
     }
 
+    public String getPath() {
+        return path;
+    }
 }

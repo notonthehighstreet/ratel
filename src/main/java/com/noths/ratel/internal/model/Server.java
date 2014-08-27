@@ -1,4 +1,4 @@
-package com.noths.ratel;
+package com.noths.ratel.internal.model;
 
 /*
  * #%L
@@ -33,11 +33,11 @@ import java.net.UnknownHostException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-class Server {
+public class Server {
 
     private static final Logger LOG = Logger.getLogger(Server.class.getName());
 
-    static Server toServer(final String environment) {
+    public static Server toServer(final String environment) {
         String hostName;
         try {
             hostName = InetAddress.getLocalHost().getHostName();

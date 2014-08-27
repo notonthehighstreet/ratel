@@ -1,4 +1,4 @@
-package com.noths.ratel;
+package com.noths.ratel.internal.utility;
 
 /*
  * #%L

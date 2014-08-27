@@ -27,6 +27,11 @@ package com.noths.ratel;
  */
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.noths.ratel.internal.model.Error;
+import com.noths.ratel.internal.model.Notifier;
+import com.noths.ratel.internal.model.Request;
+import com.noths.ratel.internal.model.Server;
+import com.noths.ratel.internal.utility.HttpRequest;
 
 import javax.annotation.Nullable;
 import java.io.IOException;

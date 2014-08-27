@@ -1,4 +1,4 @@
-package com.noths.ratel;
+package com.noths.ratel.internal.model;
 
 /*
  * #%L
@@ -26,34 +26,36 @@ package com.noths.ratel;
  * #L%
  */
 
-import java.io.File;
-import java.net.URISyntaxException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-class ProjectRoot {
+public class Notifier {
 
-    private static final Logger LOG = Logger.getLogger(ProjectRoot.class.getName());
+    @JsonProperty("api_key")
+    private final String apiKey;
+    private final String name;
+    private final String version;
+    private final String language;
 
-    static ProjectRoot projectRoot() {
-        String rootDirectory;
-        try {
-            rootDirectory = new File(ProjectRoot.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getAbsolutePath();
-        } catch (URISyntaxException e) {
-            LOG.log(Level.WARNING, "Unable to work out root directory", e);
-            rootDirectory = "Unable to work out root directory " + e.getMessage();
-        }
-
-        return new ProjectRoot(rootDirectory);
+    public Notifier(final String apiKey, final String name, final String version, final String language) {
+        this.apiKey = apiKey;
+        this.name = name;
+        this.version = version;
+        this.language = language;
     }
 
-    private final String path;
-
-    private ProjectRoot(final String path) {
-        this.path = path;
+    public String getApiKey() {
+        return apiKey;
     }
 
-    public String getPath() {
-        return path;
+    public String getName() {
+        return name;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public String getLanguage() {
+        return language;
     }
 }

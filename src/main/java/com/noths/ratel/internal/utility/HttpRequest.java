@@ -1,4 +1,4 @@
-package com.noths.ratel;
+package com.noths.ratel.internal.utility;
 
 /*
  * #%L
@@ -26,36 +26,38 @@ package com.noths.ratel;
  * #L%
  */
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-class Notifier {
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
-    @JsonProperty("api_key")
-    private final String apiKey;
-    private final String name;
-    private final String version;
-    private final String language;
+public class HttpRequest {
 
-    Notifier(final String apiKey, final String name, final String version, final String language) {
-        this.apiKey = apiKey;
-        this.name = name;
-        this.version = version;
-        this.language = language;
+    private static final int TEN_SECONDS = (int) TimeUnit.SECONDS.toMillis(10);
+    private final ObjectMapper mapper;
+
+    public HttpRequest(final ObjectMapper mapper) {
+        this.mapper = mapper;
     }
 
-    public String getApiKey() {
-        return apiKey;
-    }
+    public int call(final HttpURLConnection connection, final String method, final Map<String, String> headers, final Object body) throws IOException {
 
-    public String getName() {
-        return name;
-    }
+        connection.setConnectTimeout(TEN_SECONDS);
+        connection.setReadTimeout(TEN_SECONDS);
 
-    public String getVersion() {
-        return version;
-    }
+        connection.setRequestMethod(method);
 
-    public String getLanguage() {
-        return language;
+        for (final Map.Entry<String, String> header : headers.entrySet()) {
+            connection.setRequestProperty(header.getKey(), header.getValue());
+        }
+
+        connection.setDoOutput(true);
+
+        mapper.writeValue(connection.getOutputStream(), body);
+
+        return connection.getResponseCode();
+
     }
 }

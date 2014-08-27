@@ -1,4 +1,4 @@
-package com.noths.ratel;
+package com.noths.ratel.internal.model;
 
 /*
  * #%L
@@ -31,9 +31,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
 import java.util.List;
 
-class Error {
+public class Error {
 
-    static Error fromException(final Throwable e) {
+    public static Error fromException(final Throwable e) {
         return new Error(e.getClass().getName(), e.getMessage(), unwrapStackTrace(e));
     }
 

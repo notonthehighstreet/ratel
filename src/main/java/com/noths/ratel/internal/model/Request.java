@@ -1,4 +1,4 @@
-package com.noths.ratel;
+package com.noths.ratel.internal.model;
 
 /*
  * #%L
@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Map;
 
-class Request {
+public class Request {
     private String url;
     private Map<String, String> params;
     @JsonProperty("cgi_data")

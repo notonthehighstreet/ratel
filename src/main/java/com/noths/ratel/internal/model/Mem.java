@@ -1,4 +1,4 @@
-package com.noths.ratel;
+package com.noths.ratel.internal.model;
 
 /*
  * #%L
@@ -26,49 +26,41 @@ package com.noths.ratel;
  * #L%
  */
 
-class Backtrace {
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-    static Backtrace fromStackTrace(final StackTraceElement e) {
-        final Backtrace backtrace = new Backtrace();
-        backtrace.setFile(e.getClassName());
-        backtrace.setMethod(e.getMethodName());
-        backtrace.setNumber(e.getLineNumber());
-        return backtrace;
+import java.math.BigDecimal;
+
+public class Mem {
+
+    private final BigDecimal total;
+    private final BigDecimal free;
+    @JsonProperty("free_total")
+    private final BigDecimal freeTotal;
+
+    Mem() {
+        final long max = Runtime.getRuntime().maxMemory();
+        if (max == Long.MAX_VALUE) {
+            free = toMB(Runtime.getRuntime().freeMemory());
+        } else {
+            free = toMB(max - Runtime.getRuntime().totalMemory() + Runtime.getRuntime().freeMemory());
+        }
+        freeTotal = null;
+        total = toMB(Runtime.getRuntime().maxMemory());
     }
 
-    static Backtrace markerBacktrace(final Throwable e) {
-        final Backtrace backtrace = new Backtrace();
-        backtrace.setNumber(-1);
-        backtrace.setFile("Caused by: " + e);
-        return backtrace;
+    public BigDecimal getTotal() {
+        return total;
     }
 
-    private String file;
-    private Integer number;
-    private String method;
-
-    public String getFile() {
-        return file;
+    public BigDecimal getFree() {
+        return free;
     }
 
-    public void setFile(final String file) {
-        this.file = file;
+    public BigDecimal getFreeTotal() {
+        return freeTotal;
     }
 
-    public Integer getNumber() {
-        return number;
+    private BigDecimal toMB(final long bytes) {
+        return new BigDecimal(bytes).divide(new BigDecimal(1024 * 1024));
     }
-
-    public void setNumber(final Integer number) {
-        this.number = number;
-    }
-
-    public String getMethod() {
-        return method;
-    }
-
-    public void setMethod(final String method) {
-        this.method = method;
-    }
-
 }
