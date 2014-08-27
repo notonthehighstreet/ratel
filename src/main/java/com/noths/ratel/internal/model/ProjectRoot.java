@@ -1,4 +1,4 @@
-package com.noths.ratel;
+package com.noths.ratel.internal.model;
 
 /*
  * #%L
@@ -26,36 +26,37 @@ package com.noths.ratel;
  * #L%
  */
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import java.io.File;
+import java.net.URISyntaxException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-class Notifier {
+/**
+ * Honeybadger API class. Contains information about where the code is being run from.
+ */
+public class ProjectRoot {
 
-    @JsonProperty("api_key")
-    private final String apiKey;
-    private final String name;
-    private final String version;
-    private final String language;
+    private static final Logger LOG = Logger.getLogger(ProjectRoot.class.getName());
 
-    Notifier(final String apiKey, final String name, final String version, final String language) {
-        this.apiKey = apiKey;
-        this.name = name;
-        this.version = version;
-        this.language = language;
+    public static ProjectRoot projectRoot() {
+        String rootDirectory;
+        try {
+            rootDirectory = new File(ProjectRoot.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getAbsolutePath();
+        } catch (URISyntaxException e) {
+            LOG.log(Level.WARNING, "Unable to work out root directory", e);
+            rootDirectory = "Unable to work out root directory " + e.getMessage();
+        }
+
+        return new ProjectRoot(rootDirectory);
     }
 
-    public String getApiKey() {
-        return apiKey;
+    private final String path;
+
+    private ProjectRoot(final String path) {
+        this.path = path;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public String getVersion() {
-        return version;
-    }
-
-    public String getLanguage() {
-        return language;
+    public String getPath() {
+        return path;
     }
 }

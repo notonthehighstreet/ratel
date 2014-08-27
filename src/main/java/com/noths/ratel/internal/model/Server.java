@@ -1,4 +1,4 @@
-package com.noths.ratel;
+package com.noths.ratel.internal.model;
 
 /*
  * #%L
@@ -33,11 +33,14 @@ import java.net.UnknownHostException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-class Server {
+/**
+ * Honeybadger API class. Contains information about the server the code is running on.
+ */
+public class Server {
 
     private static final Logger LOG = Logger.getLogger(Server.class.getName());
 
-    static Server toServer(final String environment) {
+    public static Server toServer(final String environment) {
         String hostName;
         try {
             hostName = InetAddress.getLocalHost().getHostName();
@@ -59,7 +62,7 @@ class Server {
     private final String hostname;
     @JsonProperty("project_root")
     private final ProjectRoot projectRoot;
-    private final Stats stats = new Stats(new Mem());
+    private final Stats stats = new Stats(new Memory());
 
     public String getEnvironmentName() {
         return environmentName;

@@ -26,6 +26,11 @@ package com.noths.ratel;
  * #L%
  */
 
+import com.noths.ratel.internal.model.Error;
+import com.noths.ratel.internal.model.Notifier;
+import com.noths.ratel.internal.model.Request;
+import com.noths.ratel.internal.model.Server;
+import com.noths.ratel.internal.utility.HttpRequest;
 import org.hamcrest.CustomTypeSafeMatcher;
 import org.junit.Before;
 import org.junit.Test;
