@@ -33,14 +33,14 @@ import java.math.BigDecimal;
 /**
  * Honeybadger API class. Contains information about system memory.
  */
-public class Mem {
+public class Memory {
 
     private final BigDecimal total;
     private final BigDecimal free;
     @JsonProperty("free_total")
     private final BigDecimal freeTotal;
 
-    Mem() {
+    Memory() {
         final long max = Runtime.getRuntime().maxMemory();
         if (max == Long.MAX_VALUE) {
             free = toMB(Runtime.getRuntime().freeMemory());

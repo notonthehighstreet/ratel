@@ -62,7 +62,7 @@ public class Server {
     private final String hostname;
     @JsonProperty("project_root")
     private final ProjectRoot projectRoot;
-    private final Stats stats = new Stats(new Mem());
+    private final Stats stats = new Stats(new Memory());
 
     public String getEnvironmentName() {
         return environmentName;

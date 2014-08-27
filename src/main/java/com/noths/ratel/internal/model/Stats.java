@@ -31,13 +31,13 @@ package com.noths.ratel.internal.model;
  */
 public class Stats {
 
-    private final Mem mem;
+    private final Memory mem;
 
-    public Stats(final Mem mem) {
+    public Stats(final Memory mem) {
         this.mem = mem;
     }
 
-    public Mem getMem() {
+    public Memory getMem() {
         return mem;
     }
 
