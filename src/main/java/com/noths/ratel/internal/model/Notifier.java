@@ -28,6 +28,9 @@ package com.noths.ratel.internal.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/**
+ * Honeybadger API class. Contains general information about the error Honeybadger is being notified about.
+ */
 public class Notifier {
 
     @JsonProperty("api_key")

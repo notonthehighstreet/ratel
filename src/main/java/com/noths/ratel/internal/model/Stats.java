@@ -26,6 +26,9 @@ package com.noths.ratel.internal.model;
  * #L%
  */
 
+/**
+ * Honeybadger API class. Contains statistics about the server the code is running on.
+ */
 public class Stats {
 
     private final Mem mem;

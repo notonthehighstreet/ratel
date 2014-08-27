@@ -31,6 +31,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Honeybadger API class. Equivalent to a {@linkplain Throwable}.
+ */
 public class Error {
 
     public static Error fromException(final Throwable e) {

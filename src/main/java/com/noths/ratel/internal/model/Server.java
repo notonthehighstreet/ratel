@@ -33,6 +33,9 @@ import java.net.UnknownHostException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * Honeybadger API class. Contains information about the server the code is running on.
+ */
 public class Server {
 
     private static final Logger LOG = Logger.getLogger(Server.class.getName());

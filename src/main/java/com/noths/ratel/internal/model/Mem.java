@@ -30,6 +30,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.math.BigDecimal;
 
+/**
+ * Honeybadger API class. Contains information about system memory.
+ */
 public class Mem {
 
     private final BigDecimal total;

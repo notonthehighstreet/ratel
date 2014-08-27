@@ -26,6 +26,9 @@ package com.noths.ratel.internal.model;
  * #L%
  */
 
+/**
+ * Honeybadger API class. Equivalent to a {@linkplain StackTraceElement}.
+ */
 public class Backtrace {
 
     public static Backtrace fromStackTrace(final StackTraceElement e) {

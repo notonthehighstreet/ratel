@@ -31,6 +31,9 @@ import java.net.URISyntaxException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * Honeybadger API class. Contains information about where the code is being run from.
+ */
 public class ProjectRoot {
 
     private static final Logger LOG = Logger.getLogger(ProjectRoot.class.getName());

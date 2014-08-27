@@ -30,6 +30,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Map;
 
+/**
+ * Honeybadger API class. Contains information about a single HTTP request.
+ */
 public class Request {
     private String url;
     private Map<String, String> params;

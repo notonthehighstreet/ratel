@@ -33,6 +33,9 @@ import java.net.HttpURLConnection;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Utility class used to split out the calling of Honeybadger from creating the body. This class is required as {@linkplain java.net.URL URL} is final and so cannot be mocked.
+ */
 public class HttpRequest {
 
     private static final int TEN_SECONDS = (int) TimeUnit.SECONDS.toMillis(10);
