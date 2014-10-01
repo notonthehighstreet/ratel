@@ -1,4 +1,4 @@
-package com.noths.ratel.internal.utility;
+package com.notonthehighstreet.ratel.internal.utility;
 
 /*
  * #%L

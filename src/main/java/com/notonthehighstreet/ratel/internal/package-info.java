@@ -1,7 +1,7 @@
 /**
  * The classes within this package are for the use of this library ONLY. These classes may be completely changed between releases.
  */
-package com.noths.ratel.internal;
+package com.notonthehighstreet.ratel.internal;
 
 /*
  * #%L

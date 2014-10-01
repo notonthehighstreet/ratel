@@ -1,4 +1,4 @@
-package com.noths.ratel.internal.model;
+package com.notonthehighstreet.ratel.internal.model;
 
 /*
  * #%L
@@ -26,52 +26,39 @@ package com.noths.ratel.internal.model;
  * #L%
  */
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
- * Honeybadger API class. Equivalent to a {@linkplain StackTraceElement}.
+ * Honeybadger API class. Contains general information about the error Honeybadger is being notified about.
  */
-public class Backtrace {
+public class Notifier {
 
-    public static Backtrace fromStackTrace(final StackTraceElement e) {
-        final Backtrace backtrace = new Backtrace();
-        backtrace.setFile(e.getClassName());
-        backtrace.setMethod(e.getMethodName());
-        backtrace.setNumber(e.getLineNumber());
-        return backtrace;
+    @JsonProperty("api_key")
+    private final String apiKey;
+    private final String name;
+    private final String version;
+    private final String language;
+
+    public Notifier(final String apiKey, final String name, final String version, final String language) {
+        this.apiKey = apiKey;
+        this.name = name;
+        this.version = version;
+        this.language = language;
     }
 
-    public static Backtrace markerBacktrace(final Throwable e) {
-        final Backtrace backtrace = new Backtrace();
-        backtrace.setNumber(-1);
-        backtrace.setFile("Caused by: " + e);
-        return backtrace;
+    public String getApiKey() {
+        return apiKey;
     }
 
-    private String file;
-    private Integer number;
-    private String method;
-
-    public String getFile() {
-        return file;
+    public String getName() {
+        return name;
     }
 
-    public void setFile(final String file) {
-        this.file = file;
+    public String getVersion() {
+        return version;
     }
 
-    public Integer getNumber() {
-        return number;
+    public String getLanguage() {
+        return language;
     }
-
-    public void setNumber(final Integer number) {
-        this.number = number;
-    }
-
-    public String getMethod() {
-        return method;
-    }
-
-    public void setMethod(final String method) {
-        this.method = method;
-    }
-
 }

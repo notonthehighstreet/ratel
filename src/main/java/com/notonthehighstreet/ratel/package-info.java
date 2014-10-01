@@ -1,7 +1,8 @@
 /**
- * Classes within this package are simply utility classes.
+ * Honeybadger is the service used to collate all of the exceptions that occur in a system.
+ * @see <a href="https://honeybadger.io">Honeybadger.io</a>
  */
-package com.noths.ratel.internal.utility;
+package com.notonthehighstreet.ratel;
 
 /*
  * #%L

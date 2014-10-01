@@ -1,4 +1,7 @@
-package com.noths.ratel.internal.model;
+/**
+ * Classes within this package are simply utility classes.
+ */
+package com.notonthehighstreet.ratel.internal.utility;
 
 /*
  * #%L
@@ -25,20 +28,3 @@ package com.noths.ratel.internal.model;
  * THE SOFTWARE.
  * #L%
  */
-
-/**
- * Honeybadger API class. Contains statistics about the server the code is running on.
- */
-public class Stats {
-
-    private final Memory mem;
-
-    public Stats(final Memory mem) {
-        this.mem = mem;
-    }
-
-    public Memory getMem() {
-        return mem;
-    }
-
-}

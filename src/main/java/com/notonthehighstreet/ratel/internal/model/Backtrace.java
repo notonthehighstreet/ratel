@@ -1,4 +1,4 @@
-package com.noths.ratel.internal.model;
+package com.notonthehighstreet.ratel.internal.model;
 
 /*
  * #%L
@@ -26,37 +26,52 @@ package com.noths.ratel.internal.model;
  * #L%
  */
 
-import java.io.File;
-import java.net.URISyntaxException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 /**
- * Honeybadger API class. Contains information about where the code is being run from.
+ * Honeybadger API class. Equivalent to a {@linkplain StackTraceElement}.
  */
-public class ProjectRoot {
+public class Backtrace {
 
-    private static final Logger LOG = Logger.getLogger(ProjectRoot.class.getName());
-
-    public static ProjectRoot projectRoot() {
-        String rootDirectory;
-        try {
-            rootDirectory = new File(ProjectRoot.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getAbsolutePath();
-        } catch (URISyntaxException e) {
-            LOG.log(Level.WARNING, "Unable to work out root directory", e);
-            rootDirectory = "Unable to work out root directory " + e.getMessage();
-        }
-
-        return new ProjectRoot(rootDirectory);
+    public static Backtrace fromStackTrace(final StackTraceElement e) {
+        final Backtrace backtrace = new Backtrace();
+        backtrace.setFile(e.getClassName());
+        backtrace.setMethod(e.getMethodName());
+        backtrace.setNumber(e.getLineNumber());
+        return backtrace;
     }
 
-    private final String path;
-
-    private ProjectRoot(final String path) {
-        this.path = path;
+    public static Backtrace markerBacktrace(final Throwable e) {
+        final Backtrace backtrace = new Backtrace();
+        backtrace.setNumber(-1);
+        backtrace.setFile("Caused by: " + e);
+        return backtrace;
     }
 
-    public String getPath() {
-        return path;
+    private String file;
+    private Integer number;
+    private String method;
+
+    public String getFile() {
+        return file;
     }
+
+    public void setFile(final String file) {
+        this.file = file;
+    }
+
+    public Integer getNumber() {
+        return number;
+    }
+
+    public void setNumber(final Integer number) {
+        this.number = number;
+    }
+
+    public String getMethod() {
+        return method;
+    }
+
+    public void setMethod(final String method) {
+        this.method = method;
+    }
+
 }

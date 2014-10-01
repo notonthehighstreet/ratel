@@ -1,4 +1,4 @@
-package com.noths.ratel.internal.model;
+package com.notonthehighstreet.ratel.internal.model;
 
 /*
  * #%L
